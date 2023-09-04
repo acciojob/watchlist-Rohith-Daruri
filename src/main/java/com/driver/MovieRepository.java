@@ -5,32 +5,34 @@ import org.springframework.stereotype.Repository;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 @Repository
 public class MovieRepository {
 HashMap<String,Movie> movieHashMap = new HashMap<>();
 HashMap<String,Director>directorHashMap = new HashMap<>();
-HashMap<String, ArrayList<String>> pair = new HashMap<>();
+HashMap<String, List<String>> pair = new HashMap<>();
     public String addMovie(Movie movie) {
             movieHashMap.put(movie.getName(),movie);
         return "success";
     }
 
-    public Object addDirector(Director director) {
+    public String addDirector(Director director) {
         directorHashMap.put(director.getName(),director);
         return "success";
     }
 
     public String addMovieDirectorPair(String movie, String director) {
-        if(pair.containsKey(director)){
-            ArrayList<String> a = pair.get(director);
-            a.add(movie);
-            pair.put(director,a);
-        }
-        else{
-            ArrayList<String> a = new ArrayList<>();
-            a.add(movie);
-            pair.put(director,a);
+        if(movieHashMap.containsKey(movie) && directorHashMap.containsKey(director)) {
+            if (pair.containsKey(director)) {
+                List<String> a = pair.get(director);
+                a.add(movie);
+                pair.put(director, a);
+            } else {
+                List<String> a = new ArrayList<>();
+                a.add(movie);
+                pair.put(director, a);
+            }
         }
         return "success";
     }
@@ -43,19 +45,19 @@ HashMap<String, ArrayList<String>> pair = new HashMap<>();
         return directorHashMap.get(director);
     }
 
-    public Object getMovieByDirectorName(String director) {
+    public List<String> getMovieByDirectorName(String director) {
         return pair.get(director);
     }
 
-    public Object findAllMovies() {
-        ArrayList<String> result = new ArrayList<>();
+    public List<String> findAllMovies() {
+        List<String> result = new ArrayList<>();
         for(String str:movieHashMap.keySet()){
             result.add(str);
         }
         return result;
     }
 
-    public Object deleteDirectorByName(String director) {
+    public String deleteDirectorByName(String director) {
         if(directorHashMap.containsKey(director)){
             directorHashMap.remove(director);
         }
@@ -65,10 +67,10 @@ HashMap<String, ArrayList<String>> pair = new HashMap<>();
         return "success";
     }
 
-    public Object deleteAllDirectors() {
+    public String deleteAllDirectors() {
         for(String dir:directorHashMap.keySet()){
             if(pair.containsKey(dir)==true){
-                ArrayList<String> a = pair.get(dir);
+                List<String> a = pair.get(dir);
                 for(String s:a){
                     if(movieHashMap.containsKey(s)) {
                         movieHashMap.remove(s);
