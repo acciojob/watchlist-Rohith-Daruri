@@ -58,13 +58,19 @@ HashMap<String, List<String>> pair = new HashMap<>();
     }
 
     public String deleteDirectorByName(String director) {
-        if(directorHashMap.containsKey(director)){
-            directorHashMap.remove(director);
-        }
-        if(pair.containsKey(director)){
-            pair.remove(director);
-        }
-        return "success";
+       List<String> a  =pair.get(director);
+       if(pair.containsKey(director)) {
+           for (String str : a) {
+               if (movieHashMap.containsKey(str)) {
+                   movieHashMap.remove(str);
+               }
+           }
+           pair.remove(director);
+       }
+       if(directorHashMap.containsKey(director)){
+           directorHashMap.remove(director);
+       }
+       return "success";
     }
 
     public String deleteAllDirectors() {
@@ -76,6 +82,7 @@ HashMap<String, List<String>> pair = new HashMap<>();
                         movieHashMap.remove(s);
                     }
                 }
+                pair.remove(dir);
             }
             directorHashMap.remove(dir);
         }
