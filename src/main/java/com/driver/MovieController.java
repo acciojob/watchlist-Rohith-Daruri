@@ -11,11 +11,11 @@ import javax.websocket.server.PathParam;
 public class MovieController {
     @Autowired
     MovieService movieService;
-    @PostMapping()
+    @PostMapping("POST /movies/add-movie")
     public ResponseEntity addMovie(@RequestBody Movie movie){
         return new ResponseEntity(movieService.addMovie(movie), HttpStatus.ACCEPTED);
     }
-    @PostMapping()
+    @PostMapping("POST /movies/add-director")
     public ResponseEntity addDirector(@RequestBody Director director){
         return new ResponseEntity(movieService.addDirector(director),HttpStatus.ACCEPTED);
     }
@@ -27,7 +27,7 @@ public class MovieController {
     public ResponseEntity getMovieByName(@PathParam("name") String movie){
         return new ResponseEntity(movieService.getMovieByName(movie),HttpStatus.FOUND);
     }
-    @GetMapping(" GET /movies/get-movies-by-director-name/{director}")
+    @GetMapping(" GET /movies/get-director-by-name/{name}")
     public ResponseEntity getDirectorByName(@PathParam("director") String director){
         return new ResponseEntity(movieService.getDirectorByName(director),HttpStatus.FOUND);
     }
